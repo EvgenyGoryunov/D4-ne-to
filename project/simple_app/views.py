@@ -24,19 +24,19 @@ class Products(ListView):
 
 # дженерик для получения деталей о товаре
 class ProductDetailView(DetailView):
-    template_name = 'sample_app/product_detail.html'
+    template_name = 'product_detail.html'
     queryset = Product.objects.all()
 
 
 # дженерик для создания объекта. Надо указать только имя шаблона и класс формы, который мы написали в прошлом юните. Остальное он сделает за вас
 class ProductCreateView(CreateView):
-    template_name = 'sample_app/product_create.html'
+    template_name = 'product_create.html'
     form_class = ProductForm
 
 
 # дженерик для редактирования объекта
 class ProductUpdateView(UpdateView):
-    template_name = 'sample_app/product_create.html'
+    template_name = 'product_create.html'
     form_class = ProductForm
 
     # метод get_object мы используем вместо queryset, чтобы получить информацию об объекте, который мы собираемся редактировать
@@ -47,6 +47,6 @@ class ProductUpdateView(UpdateView):
 
 # дженерик для удаления товара
 class ProductDeleteView(DeleteView):
-    template_name = 'sample_app/product_delete.html'
+    template_name = 'product_delete.html'
     queryset = Product.objects.all()
     success_url = '/products/'
