@@ -7,6 +7,7 @@
 {% block content %}
 
 
+
 <!-- Перед таблицей добавим форму для поиска -->
 <form method="GET">
     {{ filter.form }} <!-- Форму от фильтров за нас сделает django. А вот кнопку, увы придётся делать самому -->
@@ -45,7 +46,6 @@
     </tr>
     {% endfor %}
 </table>
-
 {% if is_paginated %}
 
     {% if page_obj.has_previous %}
@@ -67,4 +67,11 @@
     {% endif %}
 
 {% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
+    <input type="submit" value="Добавить товар">
+</form>
+
 {% endblock content %}
