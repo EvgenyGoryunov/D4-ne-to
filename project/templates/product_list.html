@@ -4,12 +4,6 @@
 
 {% block content %}
 
-<!-- Перед таблицей добавим форму для поиска -->
-<form method="GET">
-    {{ filter.form }} <!-- Форму от фильтров за нас сделает django. А вот кнопку, увы придётся делать самому -->
-    <input type="submit" value="Найти">
-</form>
-
 <table>
     <thead>
         <th>
@@ -25,10 +19,13 @@
             Quantity
         </th>
     </thead>
-    {% for product in filter.qs %} <!-- поменяем products на filter.qs, т. к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+    {% for product in filter.qs %} <!-- поменяем products на filter.qs, т.к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
     <tr>
         <td>
-            {{ product.name|title }}
+            <a href="{% url 'product_detail' product.id %}">{{ product.name|title }}</a> <!-- При нажатии на имя товара в таблице нас теперь будет перекидывать на страницу с самого товара -->
+            <a href="{% url 'product_update' product.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
+
+            <a href="{% url 'product_delete' product.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->
         </td>
         <td>
             {{ product.category.name|title }}
@@ -42,6 +39,10 @@
     </tr>
     {% endfor %}
 </table>
+
+<a href="{% url 'product_create' %}">Добавить новый товар</a> <br>
+
+
 {% if is_paginated %}
 
     {% if page_obj.has_previous %}
@@ -61,13 +62,7 @@
         <a href="?page={{ page_obj.next_page_number }}">>>></a>
         <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
     {% endif %}
-
 {% endif %}
-
-<form method="POST">
-    {% csrf_token %}
-    {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
-    <input type="submit" value="Добавить товар">
-</form>
+<br>
 
 {% endblock content %}
