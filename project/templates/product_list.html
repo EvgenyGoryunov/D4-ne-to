@@ -1,7 +1,18 @@
 {% extends 'flatpages/default.html' %}
+
+
+
 {% block title %} Product list {% endblock title %}
 
 {% block content %}
+
+
+<!-- Перед таблицей добавим форму для поиска -->
+<form method="GET">
+    {{ filter.form }} <!-- Форму от фильтров за нас сделает django. А вот кнопку, увы придётся делать самому -->
+    <input type="submit" value="Найти">
+</form>
+
 <table>
     <thead>
         <th>
@@ -17,7 +28,7 @@
             Quantity
         </th>
     </thead>
-    {% for product in products %}
+    {% for product in filter.qs %} <!-- поменяем products на filter.qs, т. к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
     <tr>
         <td>
             {{ product.name|title }}
@@ -34,16 +45,14 @@
     </tr>
     {% endfor %}
 </table>
-<!-- Проверяем что поддерживается постраничный вывод -->
+
 {% if is_paginated %}
 
-    <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
     {% if page_obj.has_previous %}
         <a href="?page=1">First</a>
         <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
     {% endif %}
 
-    <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
     {% for num in page_obj.paginator.page_range %}
         {% if page_obj.number == num %}
             <a>{{ num }}</a>
@@ -52,7 +61,6 @@
         {% endif %}
     {% endfor %}
 
-    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
     {% if page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}">>>></a>
         <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
